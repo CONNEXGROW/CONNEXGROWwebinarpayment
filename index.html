@@ -105,9 +105,17 @@
             margin-top: 5px;
             display: none;
         }
+
+        .timer {
+            font-size: 18px;
+            color: #333;
+            margin-top: 20px;
+        }
     </style>
     <script type="text/javascript">
         $(document).ready(function() {
+            const paymentAmount = 50; // Specify the payment amount here
+            
             function validateFields() {
                 let isValid = true;
 
@@ -123,29 +131,38 @@
                 return isValid;
             }
 
-            $(".generate_qr").click(function() {
+            $(".generate_qr").click(function(event) {
+                event.preventDefault(); // Prevent form submission
                 if (validateFields()) {
                     $(".form").hide();
                     $(".qr_code").show();
                     var num = $(".number").val();
-                    var link = "upi://pay?pa=9471314033@ybl&am=50&tn=" + num;
-                    var upi = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + link;
+                    var link = `upi://pay?pa=9471314033@ybl&am=${paymentAmount}&tn=${num}`;
+                    var upi = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(link)}`;
                     console.log(upi);
                     $(".get_qr").attr("src", upi);
-                } else {
-                    alert("Please fill in all required fields.");
-                }
-            });
+                    
+                    // Start a 5-minute countdown timer
+                    var timerDuration = 5 * 60 * 1000; // 5 minutes in milliseconds
+                    var endTime = Date.now() + timerDuration;
 
-            $(".download_now").click(function() {
-                if (validateFields() && $(".id").val().trim() !== "") {
-                    // Additional backend code can go here
-                    // $.post("back.php",{name:name,num:num,email:email,id:id},function(res) {
-                    //     if(res==1){
-                    //     }
-                    //     else{
-                    //     }
-                    // });
+                    function updateTimer() {
+                        var now = Date.now();
+                        var remaining = endTime - now;
+
+                        if (remaining <= 0) {
+                            clearInterval(timerInterval);
+                            $(".timer").text("Time's up!");
+                            $(".form").submit(); // Submit the form after timer ends
+                        } else {
+                            var minutes = Math.floor(remaining / 60000);
+                            var seconds = Math.floor((remaining % 60000) / 1000);
+                            $(".timer").text(`${minutes}m ${seconds}s`);
+                        }
+                    }
+
+                    var timerInterval = setInterval(updateTimer, 1000);
+                    updateTimer(); // Initial call
                 } else {
                     alert("Please fill in all required fields.");
                 }
@@ -156,41 +173,36 @@
 <body>
     <section>
         <h1>CONNEXGROW WEBINAR PAYMENT</h1>
-        <div class="form">
+        <form action="https://formspree.io/f/xgvwqega" method="POST" class="form">
             <div class="flex m20">
                 <label>Full Name*</label>
-                <input type="text" name="name" placeholder="Full Name" class="m10 name">
+                <input type="text" name="name" placeholder="Full Name" class="m10 name" required>
                 <div class="error">This field is required</div>
             </div>
             <div class="flex m20">
                 <label>Upi id which you will do payment*</label>
-                <input type="text" name="phone" placeholder="Ex- +919061111111" class="m10 number">
+                <input type="text" name="upi" placeholder="Ex- +919061111111" class="m10 number" required>
                 <div class="error">This field is required</div>
             </div>
             <div class="flex m20">
                 <label>ConnexGrow email id*</label>
-                <input type="text" name="connex_email" placeholder="Ex- your.email@example.com" class="m10 connex_email">
+                <input type="text" name="connex_email" placeholder="Ex- your.email@example.com" class="m10 connex_email" required>
                 <div class="error">This field is required</div>
             </div>
             <div class="flex m20">
                 <label>Email which you will use to join ConnexGrow*</label>
-                <input type="email" name="email" placeholder="Email" class="m10 email">
+                <input type="email" name="email" placeholder="Email" class="m10 email" required>
                 <div class="error">This field is required</div>
             </div>
             <div class="flex m20">
-                <button class="generate_qr">NEXT</button>
+                <button type="button" class="generate_qr">NEXT</button>
             </div>
-        </div>
+        </form>
         <div class="qr_code m20">
-            <p>Scan the QR Code with any UPI App and pay the amount then download the source code.</p>
+            <p>Scan the QR Code with any UPI App and pay the amount.</p>
             <center><img src="" alt="QR CODE" class="get_qr m10"></center>
             <center><img src="" class="im m10"></center>
-            <div class="flex m20">
-                <label>UTR/REFERENCE/TRANSACTION ID**</label>
-                <input type="number" name="transaction_id" placeholder="UTR/REFERENCE/TRANSACTION ID" class="m10 id">
-                <div class="error">This field is required</div>
-            </div>
-            <button class="download_now m20">Download Now</button>
+            <div class="timer"></div> <!-- Timer display -->
         </div>
     </section>
 </body>
