@@ -32,7 +32,6 @@
             padding: 40px;
             overflow-y: auto;
             border-top: 10px solid #3eff09;
-            position: relative;
         }
 
         .flex {
@@ -126,28 +125,16 @@
         }
 
         .warning {
-            margin-top: 20px;
-            padding: 10px;
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            color: red;
             font-size: 14px;
-            line-height: 1.5;
-        }
-
-        .background-image {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            opacity: 0.1;
-            z-index: -1;
+            margin-top: 20px;
+            display: none;
         }
     </style>
     <script type="text/javascript">
         $(document).ready(function() {
-            const paymentAmount = 1; // Specify the payment amount here
-            
+            const paymentAmount = 100; // Replace 100 with the amount you want users to pay
+
             function validateFields() {
                 let isValid = true;
 
@@ -173,12 +160,15 @@
                     $(".form").hide();
                     $(".qr_code").show();
                     var num = $(".number").val();
-                    var link = `upi://pay?pa=9471314033@ybl&am=${paymentAmount}&tn=${num}`;
+                    var link = `upi://pay?pa=9471314033@ybl&am=${paymentAmount}&tn=Payment for Webinar&pn=ConnexGrow`;
                     var upi = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(link)}`;
-                    console.log(upi);
                     $(".get_qr").attr("src", upi);
 
-                    $(".warning").show(); // Show the warning
+                    // Show warning message
+                    $(".warning").html(`
+                        <p>Please note: If you press 'DONE' without completing the payment, it will not be accepted. We will verify every transaction from our bank statements. Please ensure all details are filled correctly. If you think you have entered something wrong before making the payment, kindly refresh the page.</p>
+                        <p>We are not using other brands' payment gateways as this would increase the cost of our webinars. Therefore, we have developed our own payment process to keep prices affordable for you.</p>
+                    `).show();
 
                     // Start a 5-minute countdown timer
                     var timerDuration = 5 * 60 * 1000; // 5 minutes in milliseconds
@@ -211,8 +201,8 @@
 
             $(".done_payment").click(function(event) {
                 event.preventDefault(); // Prevent default form action
-                submitForm(); // Submit the form
-                window.location.href = "/thank_you.html"; // Redirect to thank you page after form submission
+                submitForm();
+                window.location.href = "thank_you.html"; // Redirect to thank you page
             });
         });
     </script>
@@ -231,11 +221,11 @@
             </div>
             <div class="flex m20">
                 <label>UPI ID which you will use for payment*</label>
-                <input type="text" name="upi" placeholder="Ex- UPI ID " class="m10 number" required>
+                <input type="text" name="upi" placeholder="Ex- UPI ID" class="m10 number" required>
                 <div class="error">This field is required</div>
             </div>
             <div class="flex m20">
-                <label>ConnexGrow email ID*</label>
+                <label>ConnexGrow Email ID*</label>
                 <input type="text" name="connex_email" placeholder="Ex- your.email@example.com" class="m10 connex_email" required>
                 <div class="error">This field is required</div>
             </div>
@@ -251,13 +241,14 @@
         <div class="qr_code m20">
             <p>Scan the QR Code with any UPI App and pay the amount.</p>
             <center><img src="" alt="QR CODE" class="get_qr m10"></center>
-            <div class="warning">
-                Please ensure that you complete the payment before clicking "DONE". If you attempt to submit without making the payment, it will not work as we will verify every transaction from our bank statement. If you made an error in the details before the payment, kindly refresh the page and fill out the form again. Also, note that we are not using other brands' payment gateways to keep the webinar prices low.
-            </div>
+            <center><img src="" class="im m10"></center>
+            <div class="warning"></div> <!-- Warning message display -->
             <div class="timer"></div> <!-- Timer display -->
             <div class="payment-status">
                 <p>If you have paid the amount, click the button below to skip the countdown and complete your submission.</p>
                 <button type="button" class="done_payment">DONE</button>
             </div>
         </div>
-        <img src="file-Qd95dVapi3OhqiR
+    </section>
+</body>
+</html>
