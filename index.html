@@ -127,7 +127,14 @@
     <script type="text/javascript">
         $(document).ready(function() {
             const paymentAmount = 1; // Specify the payment amount here
-            
+
+            // Check if the form was previously submitted
+            if (localStorage.getItem('formSubmitted') === 'true') {
+                localStorage.removeItem('formSubmitted');
+                $(".form").show();
+                $(".qr_code").hide();
+            }
+
             function validateFields() {
                 let isValid = true;
 
@@ -144,20 +151,19 @@
             }
 
             function submitForm() {
+                localStorage.setItem('formSubmitted', 'true'); // Set the form submission state
                 $(".form").submit(); // Submit the form
             }
 
             $(".generate_qr").click(function(event) {
                 event.preventDefault(); // Prevent form submission
                 if (validateFields()) {
-                    $(".form").hide();
-                    $(".qr_code").show();
                     var num = $(".number").val();
                     var link = `upi://pay?pa=9471314033@ybl&am=${paymentAmount}&tn=${num}`;
                     var upi = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(link)}`;
                     console.log(upi);
                     $(".get_qr").attr("src", upi);
-                    
+
                     // Start a 5-minute countdown timer
                     var timerDuration = 5 * 60 * 1000; // 5 minutes in milliseconds
                     var endTime = Date.now() + timerDuration;
@@ -180,7 +186,8 @@
                     var timerInterval = setInterval(updateTimer, 1000);
                     updateTimer(); // Initial call
 
-                    // Show the "Done" button and status message
+                    // Show the QR code and "Done" button
+                    $(".qr_code").show();
                     $(".payment-status").show();
                 } else {
                     alert("Please fill in all required fields.");
