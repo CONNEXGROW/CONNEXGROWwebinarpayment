@@ -111,6 +111,18 @@
             color: #333;
             margin-top: 20px;
         }
+
+        .disclaimer {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .payment-status {
+            margin-top: 20px;
+            display: none;
+        }
     </style>
     <script type="text/javascript">
         $(document).ready(function() {
@@ -129,6 +141,10 @@
                 });
 
                 return isValid;
+            }
+
+            function submitForm() {
+                $(".form").submit(); // Submit the form
             }
 
             $(".generate_qr").click(function(event) {
@@ -153,7 +169,7 @@
                         if (remaining <= 0) {
                             clearInterval(timerInterval);
                             $(".timer").text("Time's up!");
-                            $(".form").submit(); // Submit the form after timer ends
+                            submitForm(); // Submit the form after timer ends
                         } else {
                             var minutes = Math.floor(remaining / 60000);
                             var seconds = Math.floor((remaining % 60000) / 1000);
@@ -163,9 +179,17 @@
 
                     var timerInterval = setInterval(updateTimer, 1000);
                     updateTimer(); // Initial call
+
+                    // Show the "Done" button and status message
+                    $(".payment-status").show();
                 } else {
                     alert("Please fill in all required fields.");
                 }
+            });
+
+            $(".done_payment").click(function(event) {
+                event.preventDefault(); // Prevent default form action
+                submitForm(); // Submit the form
             });
         });
     </script>
@@ -173,6 +197,9 @@
 <body>
     <section>
         <h1>CONNEXGROW WEBINAR PAYMENT</h1>
+        <p class="disclaimer">
+            Please ensure all details are filled in accurately. ConnexGrow is not responsible for any issues or losses that may arise from incorrect information provided in this form.
+        </p>
         <form action="https://formspree.io/f/xgvwqega" method="POST" class="form">
             <div class="flex m20">
                 <label>Full Name*</label>
@@ -203,6 +230,10 @@
             <center><img src="" alt="QR CODE" class="get_qr m10"></center>
             <center><img src="" class="im m10"></center>
             <div class="timer"></div> <!-- Timer display -->
+            <div class="payment-status">
+                <p>If you have paid the amount, click the button below to skip the countdown and complete your submission.</p>
+                <button type="button" class="done_payment">DONE</button>
+            </div>
         </div>
     </section>
 </body>
