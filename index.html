@@ -128,9 +128,6 @@
         $(document).ready(function() {
             const paymentAmount = 1; // Specify the payment amount here
 
-            // Clear the flag in localStorage when the page is loaded
-            localStorage.removeItem('formSubmitted');
-
             function validateFields() {
                 let isValid = true;
 
@@ -147,7 +144,6 @@
             }
 
             function submitForm() {
-                localStorage.setItem('formSubmitted', 'true'); // Set the form submission state
                 $(".form").submit(); // Submit the form
             }
 
@@ -194,19 +190,8 @@
             $(".done_payment").click(function(event) {
                 event.preventDefault(); // Prevent default form action
                 submitForm(); // Submit the form
+                location.reload(); // Reload the page after form submission
             });
-
-            // Handle back navigation
-            window.onpageshow = function(event) {
-                if (event.persisted || window.performance && window.performance.navigation.type == 2) {
-                    if (localStorage.getItem('formSubmitted') === 'true') {
-                        $(".form").show();
-                        $(".qr_code").hide();
-                        $(".payment-status").hide();
-                        localStorage.removeItem('formSubmitted');
-                    }
-                }
-            };
         });
     </script>
 </head>
