@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CONNEXGROW WEBINAR PAYMENT</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -131,6 +133,50 @@
             display: none;
         }
     </style>
+</head>
+<body>
+    <section>
+        <h1>CONNEXGROW WEBINAR PAYMENT</h1>
+        <p class="disclaimer">
+            Please ensure all details are filled in accurately. ConnexGrow is not responsible for any issues or losses that may arise from incorrect information provided in this form.
+        </p>
+        <form action="https://formspree.io/f/xgvwqega" method="POST" class="form">
+            <div class="flex m20">
+                <label>Full Name*</label>
+                <input type="text" name="name" placeholder="Full Name" class="m10 name" required>
+                <div class="error">This field is required</div>
+            </div>
+            <div class="flex m20">
+                <label>UPI ID which you will use for payment*</label>
+                <input type="text" name="upi" placeholder="Ex- UPI ID" class="m10 number" required>
+                <div class="error">This field is required</div>
+            </div>
+            <div class="flex m20">
+                <label>ConnexGrow Email ID*</label>
+                <input type="text" name="connex_email" placeholder="Ex- your.email@example.com" class="m10 connex_email" required>
+                <div class="error">This field is required</div>
+            </div>
+            <div class="flex m20">
+                <label>Email which you will use to join Google Meet*</label>
+                <input type="email" name="email" placeholder="Email" class="m10 email" required>
+                <div class="error">This field is required</div>
+            </div>
+            <div class="flex m20">
+                <button type="button" class="generate_qr">NEXT</button>
+            </div>
+        </form>
+        <div class="qr_code m20">
+            <p>Scan the QR Code with any UPI App and pay the amount.</p>
+            <center><img src="" alt="QR CODE" class="get_qr m10"></center>
+            <center><img src="" class="im m10"></center>
+            <div class="warning"></div> <!-- Warning message display -->
+            <div class="timer"></div> <!-- Timer display -->
+            <div class="payment-status">
+                <p>If you have paid the amount, click the button below to skip the countdown and complete your submission.</p>
+                <button type="button" class="done_payment">DONE</button>
+            </div>
+        </div>
+    </section>
     <script type="text/javascript">
         $(document).ready(function() {
             const paymentAmount = 100; // Replace 100 with the amount you want users to pay
@@ -206,49 +252,5 @@
             });
         });
     </script>
-</head>
-<body>
-    <section>
-        <h1>CONNEXGROW WEBINAR PAYMENT</h1>
-        <p class="disclaimer">
-            Please ensure all details are filled in accurately. ConnexGrow is not responsible for any issues or losses that may arise from incorrect information provided in this form.
-        </p>
-        <form action="https://formspree.io/f/xgvwqega" method="POST" class="form">
-            <div class="flex m20">
-                <label>Full Name*</label>
-                <input type="text" name="name" placeholder="Full Name" class="m10 name" required>
-                <div class="error">This field is required</div>
-            </div>
-            <div class="flex m20">
-                <label>UPI ID which you will use for payment*</label>
-                <input type="text" name="upi" placeholder="Ex- UPI ID" class="m10 number" required>
-                <div class="error">This field is required</div>
-            </div>
-            <div class="flex m20">
-                <label>ConnexGrow Email ID*</label>
-                <input type="text" name="connex_email" placeholder="Ex- your.email@example.com" class="m10 connex_email" required>
-                <div class="error">This field is required</div>
-            </div>
-            <div class="flex m20">
-                <label>Email which you will use to join Google Meet*</label>
-                <input type="email" name="email" placeholder="Email" class="m10 email" required>
-                <div class="error">This field is required</div>
-            </div>
-            <div class="flex m20">
-                <button type="button" class="generate_qr">NEXT</button>
-            </div>
-        </form>
-        <div class="qr_code m20">
-            <p>Scan the QR Code with any UPI App and pay the amount.</p>
-            <center><img src="" alt="QR CODE" class="get_qr m10"></center>
-            <center><img src="" class="im m10"></center>
-            <div class="warning"></div> <!-- Warning message display -->
-            <div class="timer"></div> <!-- Timer display -->
-            <div class="payment-status">
-                <p>If you have paid the amount, click the button below to skip the countdown and complete your submission.</p>
-                <button type="button" class="done_payment">DONE</button>
-            </div>
-        </div>
-    </section>
 </body>
 </html>
